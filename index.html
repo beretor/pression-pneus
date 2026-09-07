@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pression Pneus</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root{
+  --bg:#EEF1EA;
+  --surface:#FFFFFF;
+  --surface-2:#E4E8DF;
+  --border:#CBD2C2;
+  --text:#181F1A;
+  --text-dim:#586257;
+  --accent:#D9531E;
+  --accent-ink:#FFFFFF;
+  --pine:#2F5D3A;
+  --pine-soft:#DDEBE0;
+  --sky:#2470A6;
+  --sky-soft:#DCEAF3;
+  --track:#DEE3D6;
+  --shadow: 0 1px 2px rgba(24,31,26,.06), 0 8px 24px -12px rgba(24,31,26,.18);
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12160F;
+    --surface:#1B211A;
+    --surface-2:#222920;
+    --border:#333D2C;
+    --text:#EDF1E7;
+    --text-dim:#9AA795;
+    --accent:#F17141;
+    --accent-ink:#141805;
+    --pine:#7FBA8C;
+    --pine-soft:#20301F;
+    --sky:#7CC0EA;
+    --sky-soft:#182A32;
+    --track:#2A3324;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12160F;
+  --surface:#1B211A;
+  --surface-2:#222920;
+  --border:#333D2C;
+  --text:#EDF1E7;
+  --text-dim:#9AA795;
+  --accent:#F17141;
+  --accent-ink:#141805;
+  --pine:#7FBA8C;
+  --pine-soft:#20301F;
+  --sky:#7CC0EA;
+  --sky-soft:#182A32;
+  --track:#2A3324;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size:15px;
+  line-height:1.5;
+}
+h1,h2,h3,.num-lg,.headline{font-family:'Barlow Condensed', ui-sans-serif, sans-serif;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+
+.wrap{
+  max-width:1080px;
+  margin:0 auto;
+  padding:28px 20px 60px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+/* header */
+header{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+  padding-bottom:18px;
+}
+header .titles{display:flex; flex-direction:column; gap:2px;}
+h1{
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:.2px;
+  margin:0;
+  text-wrap:balance;
+}
+header .eyebrow{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+header .sub{color:var(--text-dim); font-size:13.5px; margin-top:2px;}
+
+/* weather strip */
+.weather{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  background:var(--sky-soft);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 18px;
+  flex-wrap:wrap;
+}
+.weather .wicon{flex:0 0 auto; width:38px; height:38px; color:var(--sky);}
+.weather .wmain{display:flex; flex-direction:column; gap:1px;}
+.weather .wmain .wplace{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.weather .wmain .wtemp{font-family:'Barlow Condensed'; font-size:26px; font-weight:700; line-height:1;}
+.weather .wmeta{color:var(--text-dim); font-size:12.5px;}
+.weather .controls{
+  margin-left:auto;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.seg{
+  display:inline-flex;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:3px;
+  gap:2px;
+}
+.seg button{
+  border:none;
+  background:transparent;
+  color:var(--text-dim);
+  font-family:inherit;
+  font-size:12.5px;
+  font-weight:600;
+  padding:6px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:background .15s, color .15s;
+}
+.seg button.active{background:var(--accent); color:var(--accent-ink);}
+.temp-field{
+  display:flex; align-items:center; gap:6px;
+  background:var(--surface); border:1px solid var(--border); border-radius:999px;
+  padding:4px 4px 4px 12px;
+}
+.temp-field label{font-size:12px; color:var(--text-dim); font-weight:600;}
+.temp-field input{
+  width:52px; border:none; background:transparent; color:var(--text);
+  font-family:'JetBrains Mono'; font-size:13px; font-weight:600; text-align:right;
+  padding:6px 8px; border-radius:999px;
+}
+.temp-field input:focus{outline:2px solid var(--accent); outline-offset:-1px;}
+
+/* rider panel */
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 22px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:flex-end;
+}
+.field{display:flex; flex-direction:column; gap:6px;}
+.field label{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.numstep{display:flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface-2);}
+.numstep button{
+  width:32px; height:38px; border:none; background:transparent; color:var(--text);
+  font-size:16px; cursor:pointer; font-family:'Barlow Condensed';
+}
+.numstep button:hover{background:var(--track);}
+.numstep input{
+  width:64px; text-align:center; border:none; background:transparent; color:var(--text);
+  font-family:'JetBrains Mono'; font-size:15px; font-weight:600; height:38px;
+}
+.numstep input:focus{outline:none;}
+.unit-suffix{font-size:12px; color:var(--text-dim); align-self:center; padding-right:8px;}
+.equip-note{font-size:12px; color:var(--text-dim); max-width:220px;}
+.equip-note b{color:var(--pine); font-family:'JetBrains Mono';}
+.total-weight{
+  margin-left:auto;
+  text-align:right;
+  display:flex; flex-direction:column; gap:2px;
+}
+.total-weight .tw-label{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.total-weight .tw-val{font-family:'JetBrains Mono'; font-size:22px; font-weight:700; color:var(--pine);}
+
+/* bike grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+  gap:18px;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.card-head{display:flex; align-items:center; gap:12px;}
+.tire-icon{flex:0 0 auto; width:52px; height:52px;}
+.card-head .names{display:flex; flex-direction:column; gap:1px; min-width:0;}
+.card-head .bike-name{font-family:'Barlow Condensed'; font-size:21px; font-weight:700; line-height:1.05;}
+.card-head .bike-type{font-size:11.5px; color:var(--text-dim);}
+.bike-type .dot{opacity:.5; margin:0 4px;}
+
+.row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.row label{font-size:12px; color:var(--text-dim); font-weight:600;}
+
+.pill-toggle{
+  display:inline-flex; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:999px; padding:3px;
+}
+.pill-toggle button{
+  border:none; background:transparent; color:var(--text-dim);
+  font-size:12px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer;
+  font-family:'Public Sans';
+}
+.pill-toggle button.active{background:var(--pine); color:#fff;}
+
+.readouts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  background:var(--surface-2);
+  border-radius:10px;
+  padding:14px;
+}
+.readout{display:flex; flex-direction:column; gap:6px;}
+.readout .ro-label{font-size:10.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); font-weight:700;}
+.readout .ro-val{font-family:'JetBrains Mono'; font-size:27px; font-weight:700; line-height:1; color:var(--accent);}
+.readout .ro-val .unit{font-size:13px; font-weight:600; color:var(--text-dim); margin-left:3px;}
+.readout .ro-psi{font-size:11.5px; color:var(--text-dim); font-family:'JetBrains Mono';}
+.gauge{position:relative; height:6px; border-radius:4px; background:var(--track); margin-top:2px;}
+.gauge .mark{position:absolute; top:-3px; width:3px; height:12px; border-radius:2px; background:var(--accent);}
+
+.card-note{font-size:11.5px; color:var(--text-dim); border-top:1px dashed var(--border); padding-top:10px;}
+.card-note .wet-flag{color:var(--sky); font-weight:600;}
+
+footer{
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  color:var(--text-dim);
+  font-size:12px;
+  line-height:1.6;
+}
+footer b{color:var(--text);}
+
+@media (max-width:560px){
+  h1{font-size:27px;}
+  .panel{flex-direction:column; align-items:stretch;}
+  .total-weight{margin-left:0; text-align:left;}
+  .weather .controls{margin-left:0; width:100%;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="titles">
+      <span class="eyebrow">Avant de rouler</span>
+      <h1>Pression des pneus</h1>
+      <span class="sub">Gravel Van&nbsp;Rysel · Rockrider VTT · Canyon Endurace</span>
+    </div>
+  </header>
+
+  <div class="weather" id="weatherStrip">
+    <svg class="wicon" id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"></svg>
+    <div class="wmain">
+      <span class="wplace" id="wPlace">Paris · météo locale</span>
+      <span class="wtemp"><span id="wTempLabel">23</span>°C</span>
+    </div>
+    <div class="wmeta" id="wMeta">Partiellement nuageux · relevé le 7 sept. à 13h00</div>
+    <div class="controls">
+      <div class="seg" id="wetSeg">
+        <button data-wet="0">☀️ Sec</button>
+        <button data-wet="1">🌧️ Mouillé</button>
+      </div>
+      <div class="temp-field">
+        <label for="tempInput">°C</label>
+        <input type="number" id="tempInput" value="23" step="1">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="field">
+      <label for="riderWeight">Poids cycliste nu <span style="text-transform:none; letter-spacing:0; font-weight:500;">· via Strava</span></label>
+      <div class="numstep">
+        <button type="button" data-step="-1" data-target="riderWeight">–</button>
+        <input type="number" id="riderWeight" value="68.75" min="35" max="140" step="0.25">
+        <button type="button" data-step="1" data-target="riderWeight">+</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Saison / équipement</label>
+      <div class="seg" id="seasonSeg">
+        <button data-season="ete">Été</button>
+        <button data-season="misaison">Mi-saison</button>
+        <button data-season="hiver">Hiver</button>
+      </div>
+    </div>
+
+    <div class="field equip-note" id="equipNote">
+      Kit mi-saison : bidons, veste légère, outils, garde-boue → <b>+2.5 kg</b>
+    </div>
+
+    <div class="total-weight">
+      <span class="tw-label">Poids total en charge</span>
+      <span class="tw-val mono" id="totalWeight">71.3 kg</span>
+    </div>
+  </div>
+
+  <div class="grid" id="bikeGrid"></div>
+
+  <footer>
+    <b>Comment c'est calculé —</b> pression de référence = 963 / (largeur du pneu en mm)<sup>1.5</sup>, ajustée au poids total
+    (poids^0.7 rapporté à 75 kg), à l'avant (−7 à −12 % selon le type), au tubeless (−12 % vs chambre à air) et au sol
+    mouillé (−3 à −6 % pour plus d'adhérence). C'est un point de départ sûr, pas une valeur absolue — affinez ensuite
+    au ressenti par tranches de 0.1–0.2 bar. Météo Paris récupérée en direct au moment de la création de cette page ;
+    modifiez température et état du sol si besoin.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var BIKES = [
+    {
+      id:"gravel",
+      name:"Gravel Van Rysel",
+      typeLabel:"Gravel",
+      wheelLabel:"700c",
+      bikeType:"gravel",
+      frontRatio:0.90,
+      widthDefault:45, widthMin:32, widthMax:50,
+      tubelessDefault:true,
+      range:[1.4,4.5],
+      tread:"gravel"
+    },
+    {
+      id:"vtt",
+      name:"Rockrider VTT",
+      typeLabel:"VTT",
+      wheelLabel:"29\"",
+      bikeType:"vtt",
+      frontRatio:0.88,
+      widthDefault:57, widthMin:50, widthMax:66,
+      tubelessDefault:true,
+      range:[0.9,3.0],
+      tread:"vtt"
+    },
+    {
+      id:"route",
+      name:"Canyon Endurace",
+      typeLabel:"Route",
+      wheelLabel:"700c",
+      bikeType:"route",
+      frontRatio:0.93,
+      widthDefault:30, widthMin:23, widthMax:35,
+      tubelessDefault:true,
+      range:[4.0,8.5],
+      tread:"route"
+    }
+  ];
+
+  var SEASON_KG = {
+    ete:      {label:"été",       kg:1.5, note:"Kit été : bidons, sacoche minimale, mini-outils"},
+    misaison: {label:"mi-saison", kg:2.5, note:"Kit mi-saison : bidons, veste légère, outils, garde-boue"},
+    hiver:    {label:"hiver",     kg:4.0, note:"Kit hiver : couches, gants, lumières, garde-boue, plus d'eau/outils"}
+  };
+
+  function detectSeason(){
+    var m = new Date().getMonth(); // 0=jan
+    if (m===5||m===6||m===7) return "ete";
+    if (m===11||m===0||m===1) return "hiver";
+    return "misaison";
+  }
+
+  var state = {
+    riderWeight: 68.75,
+    season: detectSeason(),
+    wet: false,
+    tempC: 23,
+    bikes: {}
+  };
+
+  BIKES.forEach(function(b){
+    state.bikes[b.id] = { width: b.widthDefault, tubeless: b.tubelessDefault };
+  });
+
+  function loadPrefs(){
+    try{
+      var raw = localStorage.getItem("pression-pneus-v1");
+      if(!raw) return;
+      var saved = JSON.parse(raw);
+      if(saved.riderWeight) state.riderWeight = saved.riderWeight;
+      if(saved.season) state.season = saved.season;
+      if(saved.bikes){
+        BIKES.forEach(function(b){
+          if(saved.bikes[b.id]){
+            if(saved.bikes[b.id].width) state.bikes[b.id].width = saved.bikes[b.id].width;
+            if(typeof saved.bikes[b.id].tubeless === "boolean") state.bikes[b.id].tubeless = saved.bikes[b.id].tubeless;
+          }
+        });
+      }
+    }catch(e){}
+  }
+  function savePrefs(){
+    try{
+      localStorage.setItem("pression-pneus-v1", JSON.stringify({
+        riderWeight: state.riderWeight,
+        season: state.season,
+        bikes: state.bikes
+      }));
+    }catch(e){}
+  }
+  loadPrefs();
+
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  function calcPressure(bike, widthMm, tubeless, wet, riderWeight, equipKg){
+    var systemWeight = riderWeight + equipKg;
+    var weightFactor = Math.pow(systemWeight/75, 0.7);
+    var widthFactor = 963.06 / Math.pow(widthMm, 1.5);
+    var rear = widthFactor * weightFactor;
+    var front = rear * bike.frontRatio;
+    if (tubeless){ rear *= 0.88; front *= 0.88; }
+    if (wet){
+      var wetFactor = bike.bikeType==="route" ? 0.97 : (bike.bikeType==="gravel" ? 0.94 : 0.94);
+      rear *= wetFactor; front *= wetFactor;
+    }
+    rear = clamp(rear, bike.range[0], bike.range[1]);
+    front = clamp(front, bike.range[0], bike.range[1]);
+    return {rear:rear, front:front};
+  }
+
+  function barToPsi(b){ return b*14.5038; }
+
+  // --- icons -------------------------------------------------------
+  function treadIcon(kind){
+    var accent = "var(--accent)";
+    var dim = "var(--border)";
+    var tread = "";
+    if(kind==="route"){
+      tread = '<circle cx="26" cy="26" r="17.5" fill="none" stroke="'+dim+'" stroke-width="2"/>';
+    } else if(kind==="gravel"){
+      var ticks = "";
+      for(var i=0;i<16;i++){
+        var ang = (i/16)*Math.PI*2;
+        var x1 = 26+15.5*Math.cos(ang), y1=26+15.5*Math.sin(ang);
+        var x2 = 26+19.5*Math.cos(ang), y2=26+19.5*Math.sin(ang);
+        ticks += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+dim+'" stroke-width="1.6" stroke-linecap="round"/>';
+      }
+      tread = '<circle cx="26" cy="26" r="15.5" fill="none" stroke="'+dim+'" stroke-width="2"/>' + ticks;
+    } else {
+      var knobs = "";
+      for(var j=0;j<10;j++){
+        var a = (j/10)*Math.PI*2;
+        var kx = 26+18.5*Math.cos(a), ky=26+18.5*Math.sin(a);
+        knobs += '<rect x="'+(kx-2.2).toFixed(1)+'" y="'+(ky-2.2).toFixed(1)+'" width="4.4" height="4.4" rx="1" fill="'+dim+'" transform="rotate('+(a*180/Math.PI+45).toFixed(0)+' '+kx.toFixed(1)+' '+ky.toFixed(1)+')"/>';
+      }
+      tread = '<circle cx="26" cy="26" r="14.5" fill="none" stroke="'+dim+'" stroke-width="2"/>' + knobs;
+    }
+    return '<svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">' +
+      tread +
+      '<circle cx="26" cy="26" r="6" fill="none" stroke="'+accent+'" stroke-width="2"/>' +
+      '<circle cx="26" cy="26" r="1.6" fill="'+accent+'"/>' +
+      '</svg>';
+  }
+
+  // --- rendering -----------------------------------------------------
+  function render(){
+    var equip = SEASON_KG[state.season];
+    var totalW = state.riderWeight + equip.kg;
+
+    document.getElementById("equipNote").innerHTML =
+      equip.note.charAt(0).toUpperCase()+equip.note.slice(1) + ' → <b>+'+equip.kg.toFixed(1)+' kg</b>';
+    document.getElementById("totalWeight").textContent = totalW.toFixed(1) + " kg";
+    document.getElementById("riderWeight").value = state.riderWeight;
+
+    Array.prototype.forEach.call(document.querySelectorAll("#seasonSeg button"), function(btn){
+      btn.classList.toggle("active", btn.getAttribute("data-season")===state.season);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("#wetSeg button"), function(btn){
+      btn.classList.toggle("active", (btn.getAttribute("data-wet")==="1") === state.wet);
+    });
+
+    var grid = document.getElementById("bikeGrid");
+    grid.innerHTML = "";
+
+    BIKES.forEach(function(bike){
+      var bs = state.bikes[bike.id];
+      var p = calcPressure(bike, bs.width, bs.tubeless, state.wet, state.riderWeight, equip.kg);
+
+      var card = document.createElement("div");
+      card.className = "card";
+
+      var rearPct = clamp((p.rear - bike.range[0]) / (bike.range[1]-bike.range[0]), 0, 1) * 100;
+      var frontPct = clamp((p.front - bike.range[0]) / (bike.range[1]-bike.range[0]), 0, 1) * 100;
+
+      card.innerHTML =
+        '<div class="card-head">' +
+          '<div class="tire-icon">'+treadIcon(bike.tread)+'</div>' +
+          '<div class="names">' +
+            '<span class="bike-name">'+bike.name+'</span>' +
+            '<span class="bike-type">'+bike.typeLabel+'<span class="dot">·</span>'+bike.wheelLabel+'</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="row">' +
+          '<label>Largeur pneu</label>' +
+          '<div class="numstep">' +
+            '<button type="button" data-step="-1" data-bike="'+bike.id+'" data-field="width">–</button>' +
+            '<input type="number" data-bike="'+bike.id+'" data-field="widthInput" value="'+bs.width+'" min="'+bike.widthMin+'" max="'+bike.widthMax+'" step="1">' +
+            '<button type="button" data-step="1" data-bike="'+bike.id+'" data-field="width">+</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="row">' +
+          '<label>Montage</label>' +
+          '<div class="pill-toggle" data-bike="'+bike.id+'" data-field="tubeless">' +
+            '<button data-val="0" class="'+(!bs.tubeless?"active":"")+'">Tubetype</button>' +
+            '<button data-val="1" class="'+(bs.tubeless?"active":"")+'">Tubeless</button>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="readouts">' +
+          '<div class="readout">' +
+            '<span class="ro-label">Avant</span>' +
+            '<span class="ro-val mono">'+p.front.toFixed(1)+'<span class="unit">bar</span></span>' +
+            '<span class="ro-psi">'+barToPsi(p.front).toFixed(0)+' psi</span>' +
+            '<div class="gauge"><div class="mark" style="left:'+frontPct.toFixed(0)+'%"></div></div>' +
+          '</div>' +
+          '<div class="readout">' +
+            '<span class="ro-label">Arrière</span>' +
+            '<span class="ro-val mono">'+p.rear.toFixed(1)+'<span class="unit">bar</span></span>' +
+            '<span class="ro-psi">'+barToPsi(p.rear).toFixed(0)+' psi</span>' +
+            '<div class="gauge"><div class="mark" style="left:'+rearPct.toFixed(0)+'%"></div></div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="card-note">' +
+          (bs.tubeless ? "Tubeless : pression abaissée d'env. 12% vs chambre à air, sans risque de pincement. " : "Chambre à air : marge de sécurité anti-pincement incluse. ") +
+          (state.wet ? '<span class="wet-flag">Sol mouillé : pression réduite pour l’adhérence.</span>' : "Sol sec.") +
+        '</div>';
+
+      grid.appendChild(card);
+    });
+
+    attachBikeHandlers();
+    savePrefs();
+  }
+
+  function attachBikeHandlers(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-field="width"]'), function(btn){
+      btn.onclick = function(){
+        var id = btn.getAttribute("data-bike");
+        var bike = BIKES.filter(function(b){return b.id===id;})[0];
+        var bs = state.bikes[id];
+        var step = parseInt(btn.getAttribute("data-step"),10);
+        bs.width = clamp(bs.width + step, bike.widthMin, bike.widthMax);
+        render();
+      };
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-field="widthInput"]'), function(inp){
+      inp.onchange = function(){
+        var id = inp.getAttribute("data-bike");
+        var bike = BIKES.filter(function(b){return b.id===id;})[0];
+        var v = parseInt(inp.value,10);
+        if(isNaN(v)) v = bike.widthDefault;
+        state.bikes[id].width = clamp(v, bike.widthMin, bike.widthMax);
+        render();
+      };
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-field="tubeless"] button'), function(btn){
+      btn.onclick = function(){
+        var wrap = btn.parentElement;
+        var id = wrap.getAttribute("data-bike");
+        state.bikes[id].tubeless = btn.getAttribute("data-val")==="1";
+        render();
+      };
+    });
+  }
+
+  // --- global controls -------------------------------------------------
+  Array.prototype.forEach.call(document.querySelectorAll('[data-target="riderWeight"]'), function(btn){
+    btn.onclick = function(){
+      var step = parseInt(btn.getAttribute("data-step"),10);
+      state.riderWeight = clamp(state.riderWeight + step, 35, 140);
+      render();
+    };
+  });
+  document.getElementById("riderWeight").onchange = function(e){
+    var v = parseFloat(e.target.value);
+    if(isNaN(v)) v = 68.75;
+    state.riderWeight = clamp(v, 35, 140);
+    render();
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll("#seasonSeg button"), function(btn){
+    btn.onclick = function(){
+      state.season = btn.getAttribute("data-season");
+      render();
+    };
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("#wetSeg button"), function(btn){
+    btn.onclick = function(){
+      state.wet = btn.getAttribute("data-wet")==="1";
+      render();
+    };
+  });
+
+  document.getElementById("tempInput").onchange = function(e){
+    var v = parseInt(e.target.value,10);
+    if(isNaN(v)) v = 23;
+    state.tempC = v;
+    document.getElementById("wTempLabel").textContent = v;
+  };
+
+  // weather icon (partly cloudy, matches the fetched Paris condition)
+  document.getElementById("weatherIcon").innerHTML =
+    '<circle cx="9" cy="10" r="5" fill="none"/>' +
+    '<path d="M8 17h9a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 12.2 4 4 0 0 0 8 17Z" fill="none"/>';
+
+  // geolocation is indicative only: browser coordinates, no live weather
+  // lookup (the artifact CSP blocks calls to external weather APIs), so
+  // this just replaces the static "Paris" label with where the viewer
+  // actually is — température/état du sol restent à ajuster à la main.
+  function tryGeolocate(){
+    try{
+      if(!("geolocation" in navigator)) return;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        var lat = pos.coords.latitude, lon = pos.coords.longitude;
+        var latDir = lat>=0 ? "N" : "S";
+        var lonDir = lon>=0 ? "E" : "O";
+        var label = Math.abs(lat).toFixed(2)+"°"+latDir+", "+Math.abs(lon).toFixed(2)+"°"+lonDir;
+        var el = document.getElementById("wPlace");
+        if(el) el.textContent = label + " · position indicative";
+      }, function(){
+        // permission refusée ou indisponible : on garde le libellé Paris par défaut
+      }, { timeout:6000, maximumAge:600000 });
+    }catch(e){}
+  }
+
+  render();
+  tryGeolocate();
+})();
+</script>
+</body>
+</html>
