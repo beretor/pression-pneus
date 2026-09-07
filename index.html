@@ -5,270 +5,262 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pression Pneus</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap');
 
 :root{
-  --bg:#EEF1EA;
-  --surface:#FFFFFF;
-  --surface-2:#E4E8DF;
-  --border:#CBD2C2;
-  --text:#181F1A;
-  --text-dim:#586257;
-  --accent:#D9531E;
+  --bg:#FFFFFF;
+  --surface-2:#F4F3EF;
+  --border:#DEDBD3;
+  --border-strong:#14130F;
+  --text:#14130F;
+  --text-dim:#6B6860;
+  --accent:#B4231D;
   --accent-ink:#FFFFFF;
-  --pine:#2F5D3A;
-  --pine-soft:#DDEBE0;
-  --sky:#2470A6;
-  --sky-soft:#DCEAF3;
-  --track:#DEE3D6;
-  --shadow: 0 1px 2px rgba(24,31,26,.06), 0 8px 24px -12px rgba(24,31,26,.18);
-  --radius: 14px;
+  --track:#E7E4DC;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#12160F;
-    --surface:#1B211A;
-    --surface-2:#222920;
-    --border:#333D2C;
-    --text:#EDF1E7;
-    --text-dim:#9AA795;
-    --accent:#F17141;
-    --accent-ink:#141805;
-    --pine:#7FBA8C;
-    --pine-soft:#20301F;
-    --sky:#7CC0EA;
-    --sky-soft:#182A32;
-    --track:#2A3324;
-    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+    --bg:#121110;
+    --surface-2:#1C1A17;
+    --border:#37342C;
+    --border-strong:#F3F1EC;
+    --text:#F3F1EC;
+    --text-dim:#9C988D;
+    --accent:#E2483B;
+    --accent-ink:#121110;
+    --track:#2B2823;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#12160F;
-  --surface:#1B211A;
-  --surface-2:#222920;
-  --border:#333D2C;
-  --text:#EDF1E7;
-  --text-dim:#9AA795;
-  --accent:#F17141;
-  --accent-ink:#141805;
-  --pine:#7FBA8C;
-  --pine-soft:#20301F;
-  --sky:#7CC0EA;
-  --sky-soft:#182A32;
-  --track:#2A3324;
-  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  --bg:#121110;
+  --surface-2:#1C1A17;
+  --border:#37342C;
+  --border-strong:#F3F1EC;
+  --text:#F3F1EC;
+  --text-dim:#9C988D;
+  --accent:#E2483B;
+  --accent-ink:#121110;
+  --track:#2B2823;
 }
 
 *{box-sizing:border-box;}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  font-family:'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   font-size:15px;
-  line-height:1.5;
+  line-height:1.55;
 }
-h1,h2,h3,.num-lg,.headline{font-family:'Barlow Condensed', ui-sans-serif, sans-serif;}
-.mono{font-family:'JetBrains Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+h1,h2,h3{font-family:'Archivo', ui-sans-serif, sans-serif;}
+.mono{font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums;}
+.tracked{text-transform:uppercase; letter-spacing:1.4px;}
 
 .wrap{
   max-width:1080px;
   margin:0 auto;
-  padding:28px 20px 60px;
+  padding:0 20px 60px;
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:0;
 }
 
-/* header */
+/* header — masthead */
 header{
+  border-bottom:2px solid var(--border-strong);
+  padding:34px 0 20px;
   display:flex;
-  align-items:baseline;
+  align-items:flex-end;
   justify-content:space-between;
   gap:16px;
   flex-wrap:wrap;
-  border-bottom:1px solid var(--border);
-  padding-bottom:18px;
-}
-header .titles{display:flex; flex-direction:column; gap:2px;}
-h1{
-  font-size:34px;
-  font-weight:700;
-  letter-spacing:.2px;
-  margin:0;
-  text-wrap:balance;
 }
 header .eyebrow{
+  display:block;
   font-size:11px;
   font-weight:600;
-  letter-spacing:1.6px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:var(--accent);
+  margin-bottom:10px;
 }
-header .sub{color:var(--text-dim); font-size:13.5px; margin-top:2px;}
+h1{
+  font-size:44px;
+  font-weight:800;
+  letter-spacing:-.5px;
+  text-transform:uppercase;
+  margin:0;
+  line-height:.96;
+  text-wrap:balance;
+}
+header .sub{
+  color:var(--text-dim);
+  font-size:12.5px;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  margin-top:10px;
+}
 
 /* weather strip */
 .weather{
   display:flex;
   align-items:center;
   gap:18px;
-  background:var(--sky-soft);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  padding:18px 0;
   flex-wrap:wrap;
 }
-.weather .wicon{flex:0 0 auto; width:38px; height:38px; color:var(--sky);}
+.weather .wicon{flex:0 0 auto; width:30px; height:30px; color:var(--text);}
 .weather .wmain{display:flex; flex-direction:column; gap:1px;}
-.weather .wmain .wplace{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
-.weather .wmain .wtemp{font-family:'Barlow Condensed'; font-size:26px; font-weight:700; line-height:1;}
-.weather .wmeta{color:var(--text-dim); font-size:12.5px;}
+.weather .wmain .wplace{font-size:11px; letter-spacing:1.4px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.weather .wmain .wtemp{font-family:'Archivo'; font-size:24px; font-weight:800; line-height:1.15;}
+.weather .wmeta{color:var(--text-dim); font-size:12.5px; border-left:1px solid var(--border); padding-left:18px;}
 .weather .controls{
   margin-left:auto;
   display:flex;
-  gap:8px;
+  gap:22px;
   align-items:center;
   flex-wrap:wrap;
 }
 .seg{
   display:inline-flex;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:3px;
-  gap:2px;
+  gap:16px;
 }
 .seg button{
   border:none;
+  border-bottom:2px solid transparent;
   background:transparent;
   color:var(--text-dim);
-  font-family:inherit;
-  font-size:12.5px;
+  font-family:'IBM Plex Sans';
+  font-size:11.5px;
   font-weight:600;
-  padding:6px 12px;
-  border-radius:999px;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  padding:2px 0 6px;
   cursor:pointer;
-  transition:background .15s, color .15s;
+  transition:color .15s, border-color .15s;
 }
-.seg button.active{background:var(--accent); color:var(--accent-ink);}
+.seg button.active{color:var(--text); border-bottom-color:var(--accent);}
 .temp-field{
-  display:flex; align-items:center; gap:6px;
-  background:var(--surface); border:1px solid var(--border); border-radius:999px;
-  padding:4px 4px 4px 12px;
+  display:flex; align-items:baseline; gap:6px;
+  border-bottom:1px solid var(--border);
+  padding:0 0 4px;
 }
-.temp-field label{font-size:12px; color:var(--text-dim); font-weight:600;}
+.temp-field label{font-size:11px; color:var(--text-dim); font-weight:600; letter-spacing:1px; text-transform:uppercase;}
 .temp-field input{
-  width:52px; border:none; background:transparent; color:var(--text);
-  font-family:'JetBrains Mono'; font-size:13px; font-weight:600; text-align:right;
-  padding:6px 8px; border-radius:999px;
+  width:44px; border:none; background:transparent; color:var(--text);
+  font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; text-align:right;
+  padding:2px 0;
 }
-.temp-field input:focus{outline:2px solid var(--accent); outline-offset:-1px;}
+.temp-field input:focus{outline:none; color:var(--accent);}
 
 /* rider panel */
 .panel{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px 22px;
+  border-bottom:1px solid var(--border);
+  padding:22px 0;
   display:flex;
   flex-wrap:wrap;
-  gap:24px;
+  gap:32px;
   align-items:flex-end;
 }
-.field{display:flex; flex-direction:column; gap:6px;}
-.field label{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
-.numstep{display:flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface-2);}
+.field{display:flex; flex-direction:column; gap:8px;}
+.field label{font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.numstep{display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); padding-bottom:4px;}
 .numstep button{
-  width:32px; height:38px; border:none; background:transparent; color:var(--text);
-  font-size:16px; cursor:pointer; font-family:'Barlow Condensed';
+  width:20px; height:24px; border:1px solid var(--border); background:transparent; color:var(--text);
+  font-size:14px; line-height:1; cursor:pointer; font-family:'Archivo'; font-weight:700;
 }
-.numstep button:hover{background:var(--track);}
+.numstep button:hover{border-color:var(--border-strong); color:var(--accent);}
 .numstep input{
   width:64px; text-align:center; border:none; background:transparent; color:var(--text);
-  font-family:'JetBrains Mono'; font-size:15px; font-weight:600; height:38px;
+  font-family:'IBM Plex Mono'; font-size:16px; font-weight:600; height:24px;
 }
 .numstep input:focus{outline:none;}
-.unit-suffix{font-size:12px; color:var(--text-dim); align-self:center; padding-right:8px;}
-.equip-note{font-size:12px; color:var(--text-dim); max-width:220px;}
-.equip-note b{color:var(--pine); font-family:'JetBrains Mono';}
+.equip-note{font-size:12px; color:var(--text-dim); max-width:230px; line-height:1.5;}
+.equip-note b{color:var(--accent); font-family:'IBM Plex Mono'; font-weight:600;}
 .total-weight{
   margin-left:auto;
   text-align:right;
-  display:flex; flex-direction:column; gap:2px;
+  display:flex; flex-direction:column; gap:4px;
 }
-.total-weight .tw-label{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
-.total-weight .tw-val{font-family:'JetBrains Mono'; font-size:22px; font-weight:700; color:var(--pine);}
+.total-weight .tw-label{font-size:11px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.total-weight .tw-val{font-family:'Archivo'; font-size:26px; font-weight:800;}
 
-/* bike grid */
+/* bike grid — spec-sheet columns */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
-  gap:18px;
+  border-top:1px solid var(--border);
 }
 .card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:20px;
+  border-bottom:1px solid var(--border);
+  border-left:1px solid var(--border);
+  padding:26px 24px;
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:18px;
 }
-.card-head{display:flex; align-items:center; gap:12px;}
-.tire-icon{flex:0 0 auto; width:52px; height:52px;}
-.card-head .names{display:flex; flex-direction:column; gap:1px; min-width:0;}
-.card-head .bike-name{font-family:'Barlow Condensed'; font-size:21px; font-weight:700; line-height:1.05;}
-.card-head .bike-type{font-size:11.5px; color:var(--text-dim);}
-.bike-type .dot{opacity:.5; margin:0 4px;}
+.card:first-child{border-left:none;}
+@media (max-width:719px){
+  .card{border-left:none;}
+}
+.card-head{display:flex; align-items:center; gap:14px;}
+.tire-icon{flex:0 0 auto; width:44px; height:44px;}
+.card-head .names{display:flex; flex-direction:column; gap:2px; min-width:0;}
+.card-head .bike-name{font-family:'Archivo'; font-size:19px; font-weight:800; text-transform:uppercase; letter-spacing:-.2px; line-height:1.1;}
+.card-head .bike-type{font-size:11px; color:var(--text-dim); letter-spacing:.8px; text-transform:uppercase;}
+.bike-type .dot{opacity:.5; margin:0 5px;}
 
 .row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-.row label{font-size:12px; color:var(--text-dim); font-weight:600;}
+.row label{font-size:11px; color:var(--text-dim); font-weight:600; letter-spacing:1px; text-transform:uppercase;}
 
 .pill-toggle{
-  display:inline-flex; background:var(--surface-2); border:1px solid var(--border);
-  border-radius:999px; padding:3px;
+  display:inline-flex; gap:14px;
 }
 .pill-toggle button{
-  border:none; background:transparent; color:var(--text-dim);
-  font-size:12px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer;
-  font-family:'Public Sans';
+  border:none; border-bottom:2px solid transparent; background:transparent; color:var(--text-dim);
+  font-size:11.5px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:2px 0 5px; cursor:pointer;
+  font-family:'IBM Plex Sans';
 }
-.pill-toggle button.active{background:var(--pine); color:#fff;}
+.pill-toggle button.active{color:var(--text); border-bottom-color:var(--accent);}
 
 .readouts{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
-  background:var(--surface-2);
-  border-radius:10px;
-  padding:14px;
-}
-.readout{display:flex; flex-direction:column; gap:6px;}
-.readout .ro-label{font-size:10.5px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-dim); font-weight:700;}
-.readout .ro-val{font-family:'JetBrains Mono'; font-size:27px; font-weight:700; line-height:1; color:var(--accent);}
-.readout .ro-val .unit{font-size:13px; font-weight:600; color:var(--text-dim); margin-left:3px;}
-.readout .ro-psi{font-size:11.5px; color:var(--text-dim); font-family:'JetBrains Mono';}
-.gauge{position:relative; height:6px; border-radius:4px; background:var(--track); margin-top:2px;}
-.gauge .mark{position:absolute; top:-3px; width:3px; height:12px; border-radius:2px; background:var(--accent);}
-
-.card-note{font-size:11.5px; color:var(--text-dim); border-top:1px dashed var(--border); padding-top:10px;}
-.card-note .wet-flag{color:var(--sky); font-weight:600;}
-
-footer{
+  gap:20px;
   border-top:1px solid var(--border);
   padding-top:16px;
+}
+.readout{display:flex; flex-direction:column; gap:7px;}
+.readout .ro-label{font-size:10.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--text-dim); font-weight:600;}
+.readout .ro-val{font-family:'IBM Plex Mono'; font-size:29px; font-weight:700; line-height:1; color:var(--accent);}
+.readout .ro-val .unit{font-size:12px; font-weight:500; color:var(--text-dim); margin-left:3px; font-family:'IBM Plex Sans'; text-transform:uppercase;}
+.readout .ro-psi{font-size:11.5px; color:var(--text-dim); font-family:'IBM Plex Mono';}
+.gauge{position:relative; height:2px; background:var(--track); margin-top:4px;}
+.gauge .mark{position:absolute; top:-3px; width:2px; height:8px; background:var(--accent);}
+
+.card-note{font-size:11.5px; color:var(--text-dim); border-top:1px solid var(--border); padding-top:12px; line-height:1.5;}
+.card-note .wet-flag{color:var(--text); font-weight:600;}
+
+footer{
+  border-top:2px solid var(--border-strong);
+  padding-top:20px;
+  margin-top:6px;
   color:var(--text-dim);
   font-size:12px;
-  line-height:1.6;
+  line-height:1.65;
 }
-footer b{color:var(--text);}
+footer .f-eyebrow{
+  display:block; font-size:11px; font-weight:600; letter-spacing:1.6px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:8px;
+}
+footer b{color:var(--text); font-weight:600;}
 
 @media (max-width:560px){
-  h1{font-size:27px;}
+  h1{font-size:30px;}
   .panel{flex-direction:column; align-items:stretch;}
   .total-weight{margin-left:0; text-align:left;}
-  .weather .controls{margin-left:0; width:100%;}
+  .weather .controls{margin-left:0; width:100%; justify-content:space-between;}
+  .weather .wmeta{border-left:none; padding-left:0; width:100%;}
 }
 </style>
 </head>
@@ -285,7 +277,7 @@ footer b{color:var(--text);}
   </header>
 
   <div class="weather" id="weatherStrip">
-    <svg class="wicon" id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"></svg>
+    <svg class="wicon" id="weatherIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"></svg>
     <div class="wmain">
       <span class="wplace" id="wPlace">Paris · météo locale</span>
       <span class="wtemp"><span id="wTempLabel">23</span>°C</span>
@@ -293,8 +285,8 @@ footer b{color:var(--text);}
     <div class="wmeta" id="wMeta">Partiellement nuageux · relevé le 7 sept. à 13h00</div>
     <div class="controls">
       <div class="seg" id="wetSeg">
-        <button data-wet="0">☀️ Sec</button>
-        <button data-wet="1">🌧️ Mouillé</button>
+        <button data-wet="0">Sec</button>
+        <button data-wet="1">Mouillé</button>
       </div>
       <div class="temp-field">
         <label for="tempInput">°C</label>
@@ -335,6 +327,7 @@ footer b{color:var(--text);}
   <div class="grid" id="bikeGrid"></div>
 
   <footer>
+    <span class="f-eyebrow">Méthode</span>
     <b>Comment c'est calculé —</b> pression de référence = 963 / (largeur du pneu en mm)<sup>1.5</sup>, ajustée au poids total
     (poids^0.7 rapporté à 75 kg), à l'avant (−7 à −12 % selon le type), au tubeless (−12 % vs chambre à air) et au sol
     mouillé (−3 à −6 % pour plus d'adhérence). C'est un point de départ sûr, pas une valeur absolue — affinez ensuite
@@ -463,19 +456,19 @@ footer b{color:var(--text);}
   // --- icons -------------------------------------------------------
   function treadIcon(kind){
     var accent = "var(--accent)";
-    var dim = "var(--border)";
+    var dim = "var(--border-strong)";
     var tread = "";
     if(kind==="route"){
-      tread = '<circle cx="26" cy="26" r="17.5" fill="none" stroke="'+dim+'" stroke-width="2"/>';
+      tread = '<circle cx="26" cy="26" r="17.5" fill="none" stroke="'+dim+'" stroke-width="1.6"/>';
     } else if(kind==="gravel"){
       var ticks = "";
       for(var i=0;i<16;i++){
         var ang = (i/16)*Math.PI*2;
         var x1 = 26+15.5*Math.cos(ang), y1=26+15.5*Math.sin(ang);
         var x2 = 26+19.5*Math.cos(ang), y2=26+19.5*Math.sin(ang);
-        ticks += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+dim+'" stroke-width="1.6" stroke-linecap="round"/>';
+        ticks += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+dim+'" stroke-width="1.4" stroke-linecap="round"/>';
       }
-      tread = '<circle cx="26" cy="26" r="15.5" fill="none" stroke="'+dim+'" stroke-width="2"/>' + ticks;
+      tread = '<circle cx="26" cy="26" r="15.5" fill="none" stroke="'+dim+'" stroke-width="1.6"/>' + ticks;
     } else {
       var knobs = "";
       for(var j=0;j<10;j++){
@@ -483,11 +476,11 @@ footer b{color:var(--text);}
         var kx = 26+18.5*Math.cos(a), ky=26+18.5*Math.sin(a);
         knobs += '<rect x="'+(kx-2.2).toFixed(1)+'" y="'+(ky-2.2).toFixed(1)+'" width="4.4" height="4.4" rx="1" fill="'+dim+'" transform="rotate('+(a*180/Math.PI+45).toFixed(0)+' '+kx.toFixed(1)+' '+ky.toFixed(1)+')"/>';
       }
-      tread = '<circle cx="26" cy="26" r="14.5" fill="none" stroke="'+dim+'" stroke-width="2"/>' + knobs;
+      tread = '<circle cx="26" cy="26" r="14.5" fill="none" stroke="'+dim+'" stroke-width="1.6"/>' + knobs;
     }
     return '<svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">' +
       tread +
-      '<circle cx="26" cy="26" r="6" fill="none" stroke="'+accent+'" stroke-width="2"/>' +
+      '<circle cx="26" cy="26" r="6" fill="none" stroke="'+accent+'" stroke-width="1.8"/>' +
       '<circle cx="26" cy="26" r="1.6" fill="'+accent+'"/>' +
       '</svg>';
   }
